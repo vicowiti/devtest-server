@@ -10,7 +10,7 @@ const app = express()
 db()
 //middleware
 app.use(express.json())
-
+app.use(cors())
 app.use("/auth", require("./src/routes/userRoutes"))
 
 app.get('/', (req,res) => {
