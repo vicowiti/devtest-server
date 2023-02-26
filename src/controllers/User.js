@@ -30,7 +30,7 @@ const login = async(req, res) => {
     const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // Return the user and the JWT token
-    res.status(200).json({ ...user, token});
+    res.status(200).json({ user, token});
   } catch (error) {
     console.log(error.message)
     res.status(500).json({ message: 'Something went wrong' });
@@ -58,20 +58,19 @@ const newUser = async(req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
   
       // Create a new user document
-      const newUser = new User({
+      const newUser = await User.create({
         name,
         email,
         password: hashedPassword,
         contact,
       });
   
-      // Save the new user to the database
-      await newUser.save();
+      
   
       //create token
       const token = jwt.sign({ email: newUser.email, id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       // Return the new user document
-      res.status(201).json({...newUser, token});
+      res.status(201).json({user:newUser, token});
     } catch (error) {
         console.log('====================================');
         console.log(error.message);
