@@ -69,11 +69,14 @@ const newUser = async(req, res) => {
       await newUser.save();
   
       //create token
-      const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ email: newUser.email, id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       // Return the new user document
       res.status(201).json({result :newUser, 
     token});
     } catch (error) {
+        console.log('====================================');
+        console.log(error.message);
+        console.log('====================================');
       res.status(500).json({ message: 'Something went wrong' });
     }
   
